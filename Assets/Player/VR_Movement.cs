@@ -30,6 +30,8 @@ public class VR_Movement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         playerGravityBody = GetComponent<PlayerGravityBody>();
         audioSource = GetComponent<AudioSource>();
+        // Make the game run as fast as possible
+        Application.targetFrameRate = 144;
     }
 
     // Update is called once per frame
