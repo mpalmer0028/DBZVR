@@ -6749,6 +6749,16 @@ PrefabInstance:
       propertyPath: factor
       value: 900
       objectReference: {fileID: 0}
+    - target: {fileID: 6699378737888557717, guid: a7f872b95d1ec124c8abbea8a762b9ac,
+        type: 3}
+      propertyPath: ps
+      value: 
+      objectReference: {fileID: 405959848}
+    - target: {fileID: 6699378737888557717, guid: a7f872b95d1ec124c8abbea8a762b9ac,
+        type: 3}
+      propertyPath: y_spawnerPositionOffset
+      value: -0.05
+      objectReference: {fileID: 0}
     - target: {fileID: 6699378737888557719, guid: a7f872b95d1ec124c8abbea8a762b9ac,
         type: 3}
       propertyPath: attractorPlanet
@@ -6765,6 +6775,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1000011547835092, guid: d5082f7d9f947374197e0a97786f4e40,
         type: 3}
+    - target: {fileID: 6699378738086264446, guid: a7f872b95d1ec124c8abbea8a762b9ac,
+        type: 3}
+      propertyPath: trackedObject
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6699378738091557312, guid: a7f872b95d1ec124c8abbea8a762b9ac,
         type: 3}
       propertyPath: m_Layer

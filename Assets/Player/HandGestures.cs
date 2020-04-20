@@ -14,7 +14,9 @@ public class HandGestures : MonoBehaviour
     public GameObject rightHand;
     public GameObject attackSpawner;
     public GameObject blastLarge;
+
     public float minDistanceBetweenHands;
+
 
     public float x_spawnerRotationOffset = 45;
     public float y_spawnerRotationOffset;
@@ -31,6 +33,11 @@ public class HandGestures : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //if(ps == null || vr_movement == null)
+        //{
+        //    //must have script refs
+        //    throw new System.Exception();
+        //}
     }
 
     // Update is called once per frame
@@ -74,8 +81,10 @@ public class HandGestures : MonoBehaviour
             //    );
             spawnerPosition = Vector3.Lerp(leftPosition, rightPosition, 0.5f);
 
-            //Debug.Log(transform.position);
-            //Debug.Log(spawnerPosition);
+            
+            var offset = transform.rotation * new Vector3(x_spawnerPositionOffset, y_spawnerPositionOffset, z_spawnerPositionOffset);
+
+            spawnerPosition += offset;
 
             direction = Quaternion.FromToRotation(transform.position, spawnerPosition);
             direction = Player.instance.hmdTransform.transform.rotation;

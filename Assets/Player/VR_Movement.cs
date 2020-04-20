@@ -49,12 +49,15 @@ public class VR_Movement : MonoBehaviour
 
             if (playerGravityBody.attractorPlanet)
             {
+                var movement = speed * Time.deltaTime * (Vector3.Distance(this.transform.position, planet.transform.position) * flySpeedFactorBasedOnDistanceFromPlanet) *
+                    (Vector3.ProjectOnPlane(direction, planet.transform.TransformDirection(transform.position)) +
+                        (gravityUp * gravity / speed));
                 // Move around planet
-                characterController.Move(speed * Time.deltaTime * (Vector3.Distance(this.transform.position, planet.transform.position) * flySpeedFactorBasedOnDistanceFromPlanet) * 
-                    (Vector3.ProjectOnPlane(direction, planet.transform.TransformDirection(transform.position)) + 
-                        (gravityUp * gravity / speed)
-                    )
-                );
+                characterController.Move(movement);
+                foreach (var hand in GameObject.FindGameObjectsWithTag("Hands")){
+                    //hand.transform.position -= movement;
+                }
+                
                 if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, groundedDistance))
                 {
                     StartWalkingSoundIfNotPlaying();

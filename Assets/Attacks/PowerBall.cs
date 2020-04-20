@@ -8,6 +8,10 @@ public class PowerBall : MonoBehaviour
     public int life;
     public int speed = 500;
     public float maxBallScale = 3f;
+
+    public int beamDelay = 60;
+    public ParticleSystem beamSystem;
+
     public bool fired;
     public YellCatcher yellCatcher;
 
@@ -20,17 +24,26 @@ public class PowerBall : MonoBehaviour
     private AudioSource audioSource; 
     private int i = 0; 
     private GameObject spawer; 
-    private float emissionRate; 
+    private float emissionRate;
+
+    private float initRateOverDistance;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         ps = GetComponent<ParticleSystem>();
+
         emissionRate = ps.emission.rateOverTime.constant;
+
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = startAudio;
         audioSource.Play();
+
+        var beamEmission = beamSystem.emission;
+        initRateOverDistance = beamEmission.rateOverDistance.constant;
+        var beamRateOverDistance = beamEmission.rateOverDistance;
+        beamRateOverDistance.constant = 0;
     }
 
     // Update is called once per frame
@@ -94,8 +107,27 @@ public class PowerBall : MonoBehaviour
         
     }
 
+
+    public void FixedUpdate()
+    {
+        if (this.fired)
+        {
+            if(beamDelay > 0)
+            {
+                beamDelay--;
+            }
+            else if(beamDelay == 0)
+            {
+                beamDelay--;
+                var em = beamSystem.emission;
+                    em.rateOverDistance = initRateOverDistance;
+            }            
+        }
+    }
+
     public void Fire()
     {
         this.fired = true;
+        Destroy(this.gameObject, life);
     }
 }
