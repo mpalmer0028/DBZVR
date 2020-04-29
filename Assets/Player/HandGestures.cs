@@ -82,11 +82,14 @@ public class HandGestures : MonoBehaviour
             spawnerPosition = Vector3.Lerp(leftPosition, rightPosition, 0.5f);
 
             
-            var offset = transform.rotation * new Vector3(x_spawnerPositionOffset, y_spawnerPositionOffset, z_spawnerPositionOffset);
+            var offset = (Quaternion.FromToRotation(spawnerPosition, Player.instance.hmdTransform.transform.position) * Quaternion.Euler(x_spawnerRotationOffset,
+                    y_spawnerRotationOffset,
+                    z_spawnerRotationOffset)) *
+                new Vector3(x_spawnerPositionOffset, y_spawnerPositionOffset, z_spawnerPositionOffset);
 
             spawnerPosition += offset;
 
-            direction = Quaternion.FromToRotation(transform.position, spawnerPosition);
+            
             direction = Player.instance.hmdTransform.transform.rotation;
 
             //Debug.Log(direction);
@@ -119,13 +122,13 @@ public class HandGestures : MonoBehaviour
         if ((leftPull > .3f || rightPull > .3f) && spawner != null) {
             if (powerball == null)
             {
-                this.StartPowerBall(spawnerPosition, direction, leftPull + rightPull);
+                this.StartPowerBall(direction);
             }
         }
         else if((leftPull < .3f || rightPull < .3f) && powerball != null)
         {            
             powerball.GetComponent<PowerBall>().Fire();
-            Destroy(powerball, 60);
+            //Destroy(powerball.gameObject, 60);
             powerball = null;
         }
         
@@ -138,11 +141,12 @@ public class HandGestures : MonoBehaviour
         point = dir + pivot; // calculate rotated point
         return point; // return it
     }
-    private void StartPowerBall(Vector3 spawnerPosition, Quaternion direction, float pull)
+    private void StartPowerBall(Quaternion direction)
     {
         if (powerball == null)
         {
-            powerball = Instantiate(blastLarge, spawnerPosition, direction, this.spawner.transform);
+            var powerBallSpawnerTransform = this.spawner.transform.Find("PowerBallSpawner");
+            powerball = Instantiate(blastLarge, powerBallSpawnerTransform.position, direction, powerBallSpawnerTransform);
             //powerball.transform.localScale = powerball.transform.localScale * pull * 20;
         }        
     }

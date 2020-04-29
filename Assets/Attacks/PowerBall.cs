@@ -2,15 +2,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Valve.VR;
+using Valve.VR.InteractionSystem;
 
 public class PowerBall : MonoBehaviour
 {
     public int life;
-    public int speed = 500;
+    public float speed = .5f;
     public float maxBallScale = 3f;
 
     public int beamDelay = 60;
     public ParticleSystem beamSystem;
+    public ParticleSystem chargeSystem;
+
+    public GameObject blastEmitter;
+    public GameObject explosion;
 
     public bool fired;
     public YellCatcher yellCatcher;
@@ -23,14 +29,26 @@ public class PowerBall : MonoBehaviour
     private ParticleSystem ps;
     private AudioSource audioSource; 
     private int i = 0; 
-    private GameObject spawer; 
+    private GameObject spawner; 
     private float emissionRate;
 
     private float initRateOverDistance;
+    private Vector3 initFirePos;
+
+    
 
     // Start is called before the first frame update
     void Start()
     {
+        //if (yellCatcher==null||
+        //    rb==null||
+        //    ps==null||
+        //    this.transform.parent == null
+        //    )
+        //{
+        //    throw new Exception();
+        //}
+        spawner = transform.parent.gameObject;
         rb = GetComponent<Rigidbody>();
         ps = GetComponent<ParticleSystem>();
 
@@ -63,19 +81,24 @@ public class PowerBall : MonoBehaviour
                 this.transform.parent = null;
                 this.transform.position = pos;
                 this.transform.localRotation = rot;
+                initFirePos = pos;
+                var bes = blastEmitter.GetComponent<BlastEmitterScript>();
+                bes.beamSystem = beamSystem;
+                var emitter = Instantiate(blastEmitter, transform.position, transform.rotation, spawner.transform);
+                Destroy(chargeSystem.gameObject);
 
-                //this.transform.localScale = this.transform.localScale;
             }
             
-            if (life > i)
+            if (audioSource.isPlaying)
             {
-                rb.AddForce(transform.forward * 50);
+                rb.AddForce(transform.forward * speed);
+                rb.rotation = Player.instance.hmdTransform.transform.rotation;
                 i++;
             }
             else
             {
-                audioSource.Pause();
-                Destroy(this);
+                //audioSource.Pause();
+                Destroy(gameObject);
             }
         }
         else
@@ -107,6 +130,21 @@ public class PowerBall : MonoBehaviour
         
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        //Debug.Log(collision.gameObject.name);
+        if (Vector3.Distance(collision.GetContact(0).point, initFirePos)> 10)
+        {
+            //Debug.Log(Vector3.Distance(this.transform.position, initFirePos));
+            Destroy(this.gameObject);
+        }
+    }
+
+    public void OnDestroy()
+    {
+        var exp = Instantiate(explosion, transform.position, UnityEngine.Random.rotation);
+        exp.transform.parent = null;
+    }
 
     public void FixedUpdate()
     {
@@ -127,7 +165,6 @@ public class PowerBall : MonoBehaviour
 
     public void Fire()
     {
-        this.fired = true;
-        Destroy(this.gameObject, life);
+        this.fired = true;        
     }
 }

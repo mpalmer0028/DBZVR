@@ -193,11 +193,11 @@ namespace Valve.VR.InteractionSystem
 
             Quaternion offsetRotation = handCollider.transform.rotation * wristToArmature.inverse.GetRotation();
 
-            hand.mainRenderModel.transform.rotation = offsetRotation;
+            //hand.mainRenderModel.transform.rotation = offsetRotation;
 
             Vector3 offsetPosition = handCollider.transform.TransformPoint(wristToArmature.inverse.MultiplyPoint3x4(Vector3.zero));
 
-            hand.mainRenderModel.transform.position = offsetPosition;
+            //hand.mainRenderModel.transform.position = offsetPosition;
 
             /*
             Vector3 wristPointInArmatureSpace = transform.InverseTransformPoint(handCollider.transform.position);

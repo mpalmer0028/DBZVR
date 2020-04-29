@@ -14,6 +14,8 @@ public class VR_Movement : MonoBehaviour
     public float flySpeed = 10;
     public float flySpeedFactorBasedOnDistanceFromPlanet = 1;
     public GameObject planet;
+    public GameObject leftHand;
+    public GameObject rightHand;
     public PlayerGravityBody playerGravityBody;
     public AudioClip flySound;
     public AudioClip walkSound;
@@ -35,7 +37,7 @@ public class VR_Movement : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         // Vertical movement
         var gravity = flyUpInput.state ? flySpeed : (flyDownInput.state && !characterController.isGrounded ? 0 - flySpeed : 0);
@@ -53,10 +55,8 @@ public class VR_Movement : MonoBehaviour
                     (Vector3.ProjectOnPlane(direction, planet.transform.TransformDirection(transform.position)) +
                         (gravityUp * gravity / speed));
                 // Move around planet
-                characterController.Move(movement);
-                foreach (var hand in GameObject.FindGameObjectsWithTag("Hands")){
-                    //hand.transform.position -= movement;
-                }
+                MoveCharacter(movement);
+                
                 
                 if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, groundedDistance))
                 {
@@ -70,7 +70,7 @@ public class VR_Movement : MonoBehaviour
             }
             else
             {
-                characterController.Move(speed * Time.deltaTime *
+                MoveCharacter(speed * Time.deltaTime *
                    (Vector3.ProjectOnPlane(direction, Vector3.up) +
                        (gravityUp * gravity / speed)
                    )
@@ -82,7 +82,7 @@ public class VR_Movement : MonoBehaviour
         {
             if (gravity != 0)
             {
-                characterController.Move(gravityUp * gravity * Time.deltaTime);
+                MoveCharacter(gravityUp * gravity * Time.deltaTime);
                 StartFlyingSoundIfNotPlaying();
             }
             else
@@ -127,5 +127,11 @@ public class VR_Movement : MonoBehaviour
     {
         audioSource.Pause();
         walkSoundPlaying = false;
+    }
+    CollisionFlags MoveCharacter(Vector3 motion)
+    {
+        //OpenVR.System.Get
+        //OpenVR.System.ApplyTransform();
+        return characterController.Move(motion);
     }
 }
