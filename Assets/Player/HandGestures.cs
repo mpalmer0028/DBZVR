@@ -1,9 +1,16 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 using Valve.VR.InteractionSystem;
-
+public struct HandTransform
+{
+    public Vector3 leftPosition;
+    public Quaternion leftRotation;
+    public Vector3 rightPosition;
+    public Quaternion rightRotation;
+}
 public class HandGestures : MonoBehaviour
 {
     public SteamVR_Action_Skeleton skeletonInputLeft;
@@ -12,8 +19,29 @@ public class HandGestures : MonoBehaviour
     public SteamVR_Action_Single triggerInput;
     public GameObject leftHand;
     public GameObject rightHand;
+    public GameObject testCube;
     public GameObject attackSpawner;
     public GameObject blastLarge;
+
+    /// <summary>
+    /// How many samples to compare for punch
+    /// </summary>
+    public int PuncheResolution = 20;
+
+    /// <summary>
+    /// How many updates to skip before sampling a position again
+    /// </summary>
+    public int PuncheSampleLength = 30;
+
+    /// <summary>
+    /// How fast a punch has to go to be registered
+    /// </summary>
+    public float PuncheThreshold = .5f;
+
+    /// <summary>
+    /// How close to the current looking direction the punch must be
+    /// </summary>
+    public float AcceptablePunchAngle = 45;
 
     public float minDistanceBetweenHands;
 
@@ -30,9 +58,22 @@ public class HandGestures : MonoBehaviour
     private GameObject powerball;
     private bool spawnerInScene;
 
+    private int punchSampleI = 0;
+    private float punchMagnitudeL = 0;
+    private float punchMagnitudeR = 0;
+
+    private LinkedList<HandTransform> recentPositions = new LinkedList<HandTransform>();
+
+    private AudioSource punchAudioL;
+    private AudioSource punchAudioR;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
+        punchAudioL = leftHand.GetComponent<AudioSource>();
+        punchAudioR = rightHand.GetComponent<AudioSource>();
         //if(ps == null || vr_movement == null)
         //{
         //    //must have script refs
@@ -43,42 +84,20 @@ public class HandGestures : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var leftPosition = leftHand.transform.position;
-        var rightPosition = rightHand.transform.position;
+        var playerPos = Player.instance.hmdTransform.transform.position;
+        var leftPosition = leftHand.transform.position - playerPos;
+        var rightPosition = rightHand.transform.position - playerPos;
+        var leftRotation = leftHand.transform.rotation;
+        var rightRotation = rightHand.transform.rotation;
         Vector3 spawnerPosition = Vector3.forward;
         Quaternion direction = Quaternion.identity;
+
+
+        #region Two Hand Attacks
         if (Vector3.Distance(leftPosition, rightPosition) < minDistanceBetweenHands)
         {
             //Debug.Log(poseInput[SteamVR_Input_Sources.RightHand].localRotation);
 
-            //direction = Quaternion.Lerp(
-            //    poseInput[SteamVR_Input_Sources.RightHand].localRotation,
-            //    poseInput[SteamVR_Input_Sources.LeftHand].localRotation,
-            //    0.5f);
-            //direction = Quaternion.Lerp(
-            //    skeletonInputLeft.localRotation,
-            //    skeletonInputRight.localRotation,
-            //    0.5f);
-
-            //direction = Quaternion.Lerp(
-            //    skeletonInputLeft.boneRotations[SteamVR_Skeleton_JointIndexes.root],
-            //    skeletonInputRight.boneRotations[SteamVR_Skeleton_JointIndexes.root],
-            //    0.5f) *
-            //    Quaternion.Euler(
-            //        x_spawnerRotationOffset,
-            //        y_spawnerRotationOffset,
-            //        z_spawnerRotationOffset
-            //    );
-
-            //direction = Quaternion.Lerp(
-            //    leftHand.transform.rotation,
-            //    rightHand.transform.rotation,
-            //    0.5f) *
-            //    Quaternion.Euler(
-            //        x_spawnerRotationOffset,
-            //        y_spawnerRotationOffset,
-            //        z_spawnerRotationOffset
-            //    );
             spawnerPosition = Vector3.Lerp(leftPosition, rightPosition, 0.5f);
 
             
@@ -128,10 +147,75 @@ public class HandGestures : MonoBehaviour
         else if((leftPull < .3f || rightPull < .3f) && powerball != null)
         {            
             powerball.GetComponent<PowerBall>().Fire();
-            //Destroy(powerball.gameObject, 60);
             powerball = null;
         }
+        #endregion
+
+        #region Punching
         
+        if(punchSampleI < PuncheSampleLength)
+        {
+            punchSampleI++;            
+        }
+        else
+        {
+            recentPositions.AddFirst(new HandTransform {
+                leftPosition = leftPosition, rightPosition = rightPosition,
+                leftRotation = leftRotation, rightRotation = rightRotation
+            });
+            if (recentPositions.Count > this.PuncheResolution)
+            {
+                recentPositions.RemoveLast();
+            }
+            
+            var posNode = recentPositions.First;
+            punchMagnitudeL = 0;
+            punchMagnitudeR = 0;
+            var punchDirectionL = new List<Quaternion>();
+            var punchDirectionR = new List<Quaternion>();
+            var handMovingAwayFromPlayerL = false;
+            var handMovingAwayFromPlayerR = false;
+            while (posNode != null)
+            {
+                if(posNode.Previous != null)
+                {
+                    punchMagnitudeL += Vector3.Distance(posNode.Previous.Value.leftPosition, posNode.Value.leftPosition);
+                    punchMagnitudeR += Vector3.Distance(posNode.Previous.Value.rightPosition, posNode.Value.rightPosition);
+                    //punchDirectionL.Add(Quaternion.FromToRotation(posNode.Previous.Value.leftPosition, posNode.Value.leftPosition));
+                    //punchDirectionR.Add(Quaternion.FromToRotation(posNode.Previous.Value.rightPosition, posNode.Value.rightPosition));
+                    handMovingAwayFromPlayerL = Vector3.Distance(posNode.Previous.Value.leftPosition, playerPos) < Vector3.Distance(posNode.Value.leftPosition, playerPos);
+                    handMovingAwayFromPlayerR = Vector3.Distance(posNode.Previous.Value.rightPosition, playerPos) < Vector3.Distance(posNode.Value.rightPosition, playerPos);
+                }                
+                posNode = posNode.Next;
+            }
+            
+            //var punchAvgL = CalcAvg(punchDirectionL);
+            //var punchAvgR = CalcAvg(punchDirectionR);
+            //var angleL = Quaternion.Angle(Player.instance.hmdTransform.transform.rotation, punchAvgL);
+            //var angleR = Quaternion.Angle(Player.instance.hmdTransform.transform.rotation, punchAvgR);
+            if ((punchMagnitudeL > PuncheThreshold && handMovingAwayFromPlayerL) || 
+                (punchMagnitudeR > PuncheThreshold && handMovingAwayFromPlayerR))
+            {
+                //Instantiate(testCube, recentPositions.Last.Value.leftPosition, recentPositions.Last.Value.leftRotation);
+                recentPositions.Clear();
+                Debug.Log("Punch L:" + punchMagnitudeL + " R:" + punchMagnitudeR);
+                if(punchMagnitudeL > PuncheThreshold && handMovingAwayFromPlayerL)
+                {                    
+                    punchAudioL.PlayOneShot(punchAudioL.clip);
+                }
+
+                if (punchMagnitudeR > PuncheThreshold && handMovingAwayFromPlayerR)
+                {
+                    punchAudioR.PlayOneShot(punchAudioR.clip);
+                }
+                //Debug.Log("PunchRo L:" + angleL + " R:" + angleR);
+            }
+
+            punchSampleI = 0;
+        }
+
+        #endregion
+
     }
 
     public Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion angles)
@@ -141,6 +225,7 @@ public class HandGestures : MonoBehaviour
         point = dir + pivot; // calculate rotated point
         return point; // return it
     }
+
     private void StartPowerBall(Quaternion direction)
     {
         if (powerball == null)
@@ -149,5 +234,26 @@ public class HandGestures : MonoBehaviour
             powerball = Instantiate(blastLarge, powerBallSpawnerTransform.position, direction, powerBallSpawnerTransform);
             //powerball.transform.localScale = powerball.transform.localScale * pull * 20;
         }        
+    }
+    private Quaternion CalcAvg(List<Quaternion> rotationlist)
+    {
+        if (rotationlist.Count == 0)
+            throw new ArgumentException();
+
+        var final = rotationlist[0];
+        var skipFirst = true;
+        foreach (var q in rotationlist)
+        {
+            if (skipFirst)
+            {
+                skipFirst = false;
+            }
+            else
+            {
+                final = Quaternion.Lerp(final, q, .5f).normalized;
+            }
+        }
+        
+        return final;
     }
 }

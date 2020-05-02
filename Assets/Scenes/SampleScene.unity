@@ -1963,6 +1963,11 @@ PrefabInstance:
       propertyPath: planet
       value: 
       objectReference: {fileID: 175669160}
+    - target: {fileID: 6699378737888557717, guid: a7f872b95d1ec124c8abbea8a762b9ac,
+        type: 3}
+      propertyPath: PuncheSampleLength
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6699378737888557719, guid: a7f872b95d1ec124c8abbea8a762b9ac,
         type: 3}
       propertyPath: attractorPlanet
