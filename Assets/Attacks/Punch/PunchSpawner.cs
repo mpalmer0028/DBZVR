@@ -34,14 +34,14 @@ public class PunchSpawner : MonoBehaviour
             
         }
         var des = other.gameObject.GetComponent<IDestructible>();
-            if (des == null)
-            {
-                des = other.gameObject.transform.parent.gameObject.GetComponent<IDestructible>();
-            }
-            if (des != null)
-            {
-                des.Destruct();
-            }
+        if (des == null)
+        {
+            des = other.gameObject.transform.parent.gameObject.GetComponent<IDestructible>();
+        }
+        if (des != null)
+        {
+            des.Destruct();
+        }
     }
 
     public GameObject Punch()

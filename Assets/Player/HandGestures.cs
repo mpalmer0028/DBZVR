@@ -53,6 +53,7 @@ public class HandGestures : MonoBehaviour
     public float x_spawnerPositionOffset;
     public float y_spawnerPositionOffset = -0.2f;
     public float z_spawnerPositionOffset;
+    public GameObject BodyCollider;
 
     private GameObject spawner;
     private GameObject powerball;
@@ -84,7 +85,8 @@ public class HandGestures : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var playerPos = Player.instance.hmdTransform.transform.position;
+        //var playerPos = Player.instance.hmdTransform.transform.position;
+        var playerPos = BodyCollider.transform.position;
         var leftPosition = leftHand.transform.position;
         var rightPosition = rightHand.transform.position;
         var leftRotation = leftHand.transform.rotation;
