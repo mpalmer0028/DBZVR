@@ -98,6 +98,7 @@ public class PowerBall : MonoBehaviour
             else
             {
                 //audioSource.Pause();
+
                 Destroy(gameObject);
             }
         }
@@ -136,6 +137,15 @@ public class PowerBall : MonoBehaviour
         if (Vector3.Distance(collision.GetContact(0).point, initFirePos)> 10)
         {
             //Debug.Log(Vector3.Distance(this.transform.position, initFirePos));
+            var des = collision.gameObject.GetComponent<IDestructible>();
+            if (des == null)
+            {
+                des = collision.gameObject.transform.parent.gameObject.GetComponent<IDestructible>();
+            }
+            if (des != null)
+            {
+                des.Destruct();
+            }
             Destroy(this.gameObject);
         }
     }

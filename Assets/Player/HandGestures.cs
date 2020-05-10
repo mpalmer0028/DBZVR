@@ -64,16 +64,16 @@ public class HandGestures : MonoBehaviour
 
     private LinkedList<HandTransform> recentPositions = new LinkedList<HandTransform>();
 
-    private AudioSource punchAudioL;
-    private AudioSource punchAudioR;
+    private PunchSpawner punchSpawnerL;
+    private PunchSpawner punchSpawnerR;
 
 
 
     // Start is called before the first frame update
     void Start()
     {
-        punchAudioL = leftHand.GetComponent<AudioSource>();
-        punchAudioR = rightHand.GetComponent<AudioSource>();
+        punchSpawnerL = leftHand.GetComponent<PunchSpawner>();
+        punchSpawnerR = rightHand.GetComponent<PunchSpawner>();
         //if(ps == null || vr_movement == null)
         //{
         //    //must have script refs
@@ -85,8 +85,8 @@ public class HandGestures : MonoBehaviour
     void Update()
     {
         var playerPos = Player.instance.hmdTransform.transform.position;
-        var leftPosition = leftHand.transform.position - playerPos;
-        var rightPosition = rightHand.transform.position - playerPos;
+        var leftPosition = leftHand.transform.position;
+        var rightPosition = rightHand.transform.position;
         var leftRotation = leftHand.transform.rotation;
         var rightRotation = rightHand.transform.rotation;
         Vector3 spawnerPosition = Vector3.forward;
@@ -160,7 +160,7 @@ public class HandGestures : MonoBehaviour
         else
         {
             recentPositions.AddFirst(new HandTransform {
-                leftPosition = leftPosition, rightPosition = rightPosition,
+                leftPosition = leftPosition - playerPos, rightPosition = rightPosition - playerPos,
                 leftRotation = leftRotation, rightRotation = rightRotation
             });
             if (recentPositions.Count > this.PuncheResolution)
@@ -200,13 +200,13 @@ public class HandGestures : MonoBehaviour
                 recentPositions.Clear();
                 Debug.Log("Punch L:" + punchMagnitudeL + " R:" + punchMagnitudeR);
                 if(punchMagnitudeL > PuncheThreshold && handMovingAwayFromPlayerL)
-                {                    
-                    punchAudioL.PlayOneShot(punchAudioL.clip);
+                {
+                    punchSpawnerL.Punch();
                 }
 
                 if (punchMagnitudeR > PuncheThreshold && handMovingAwayFromPlayerR)
                 {
-                    punchAudioR.PlayOneShot(punchAudioR.clip);
+                    punchSpawnerR.Punch();
                 }
                 //Debug.Log("PunchRo L:" + angleL + " R:" + angleR);
             }
