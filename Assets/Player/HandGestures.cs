@@ -22,6 +22,7 @@ public class HandGestures : MonoBehaviour
     public GameObject testCube;
     public GameObject attackSpawner;
     public GameObject blastLarge;
+    public GameObject disk;
 
     /// <summary>
     /// How many samples to compare for punch
@@ -56,7 +57,7 @@ public class HandGestures : MonoBehaviour
     public GameObject BodyCollider;
 
     private GameObject spawner;
-    private GameObject powerball;
+    private GameObject powerball;    
     private bool spawnerInScene;
 
     private int punchSampleI = 0;
@@ -68,6 +69,8 @@ public class HandGestures : MonoBehaviour
     private PunchSpawner punchSpawnerL;
     private PunchSpawner punchSpawnerR;
 
+    private GameObject diskL;
+    private GameObject diskR;
 
 
     // Start is called before the first frame update
@@ -86,14 +89,42 @@ public class HandGestures : MonoBehaviour
     void Update()
     {
         //var playerPos = Player.instance.hmdTransform.transform.position;
-        var playerPos = BodyCollider.transform.position;
+        var playerPos = transform.position;
         var leftPosition = leftHand.transform.position;
         var rightPosition = rightHand.transform.position;
         var leftRotation = leftHand.transform.rotation;
         var rightRotation = rightHand.transform.rotation;
         Vector3 spawnerPosition = Vector3.forward;
         Quaternion direction = Quaternion.identity;
+        var leftPull = triggerInput[SteamVR_Input_Sources.LeftHand].axis;
+        var rightPull = triggerInput[SteamVR_Input_Sources.RightHand].axis;
 
+        #region One Hand Attack
+        if (Vector3.Distance(leftPosition, rightPosition) >= minDistanceBetweenHands)
+        {
+            if (leftPull > .3f)
+            {
+                if (diskL == null)
+                {
+                    diskL = Instantiate(disk, leftPosition, Quaternion.identity, leftHand.transform);
+                }
+            }
+            else
+            {
+                if (diskL != null)
+                {
+
+                    diskL.GetComponent<DiskScript>().Fire();
+                    diskL = null;
+
+                }
+            }
+        }
+        else
+        {
+
+        }
+        #endregion
 
         #region Two Hand Attacks
         if (Vector3.Distance(leftPosition, rightPosition) < minDistanceBetweenHands)
@@ -135,10 +166,7 @@ public class HandGestures : MonoBehaviour
                 spawner = null;
             }
         }
-
-        //Both Hand Blast
-        var leftPull = triggerInput[SteamVR_Input_Sources.LeftHand].axis;
-        var rightPull = triggerInput[SteamVR_Input_Sources.RightHand].axis;
+        
 
         if ((leftPull > .3f || rightPull > .3f) && spawner != null) {
             if (powerball == null)
