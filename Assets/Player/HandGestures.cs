@@ -69,15 +69,19 @@ public class HandGestures : MonoBehaviour
     private PunchSpawner punchSpawnerL;
     private PunchSpawner punchSpawnerR;
 
-    private GameObject diskL;
-    private GameObject diskR;
+    private GameObject diskInstance;
 
+    private DiscZoneScript discZoneScriptL;
+    private DiscZoneScript discZoneScriptR;
 
     // Start is called before the first frame update
     void Start()
     {
         punchSpawnerL = leftHand.GetComponent<PunchSpawner>();
         punchSpawnerR = rightHand.GetComponent<PunchSpawner>();
+
+        discZoneScriptL = leftHand.GetComponent<DiscZoneScript>();
+        discZoneScriptR = rightHand.GetComponent<DiscZoneScript>();
         //if(ps == null || vr_movement == null)
         //{
         //    //must have script refs
@@ -98,31 +102,45 @@ public class HandGestures : MonoBehaviour
         Quaternion direction = Quaternion.identity;
         var leftPull = triggerInput[SteamVR_Input_Sources.LeftHand].axis;
         var rightPull = triggerInput[SteamVR_Input_Sources.RightHand].axis;
+        Debug.Log(rightPull);
 
         #region One Hand Attack
         if (Vector3.Distance(leftPosition, rightPosition) >= minDistanceBetweenHands)
         {
-            if (leftPull > .3f)
+
+            if (rightPull > .3f)
             {
-                if (diskL == null)
+                if (diskInstance == null && discZoneScriptR.InTheZone)
                 {
-                    diskL = Instantiate(disk, leftPosition, Quaternion.identity, leftHand.transform);
+                    diskInstance = Instantiate(disk, rightPosition, Quaternion.identity,
+                        rightHand.transform);
+                }
+                else if (diskInstance != null && !discZoneScriptR.InTheZone)
+                {
+                    FireDisk();
+                }
+
+            }
+            else if (leftPull > .3f)
+            {
+                if (diskInstance == null && discZoneScriptL.InTheZone)
+                {
+                    diskInstance = Instantiate(disk, leftPosition, Quaternion.identity,
+                        leftHand.transform);
+                }
+                else if (diskInstance != null && !discZoneScriptL.InTheZone)
+                {
+                    FireDisk();
                 }
             }
-            else
+            else if (diskInstance != null)
             {
-                if (diskL != null)
-                {
-
-                    diskL.GetComponent<DiskScript>().Fire();
-                    diskL = null;
-
-                }
+                FireDisk();
             }
         }
-        else
+        else if (diskInstance != null)
         {
-
+            FireDisk();
         }
         #endregion
 
@@ -228,7 +246,7 @@ public class HandGestures : MonoBehaviour
             {
                 //Instantiate(testCube, recentPositions.Last.Value.leftPosition, recentPositions.Last.Value.leftRotation);
                 recentPositions.Clear();
-                Debug.Log("Punch L:" + punchMagnitudeL + " R:" + punchMagnitudeR);
+                //Debug.Log("Punch L:" + punchMagnitudeL + " R:" + punchMagnitudeR);
                 if(punchMagnitudeL > PuncheThreshold && handMovingAwayFromPlayerL)
                 {
                     punchSpawnerL.Punch();
@@ -246,6 +264,12 @@ public class HandGestures : MonoBehaviour
 
         #endregion
 
+    }
+
+    private void FireDisk()
+    {
+        diskInstance.GetComponent<DiskScript>().Fire();
+        diskInstance = null;
     }
 
     public Vector3 RotatePointAroundPivot(Vector3 point, Vector3 pivot, Quaternion angles)

@@ -12,10 +12,12 @@ public class DiskScript : MonoBehaviour
     private bool fired = false;
     private int maxSize = 6;
     private AudioSource audioSource;
+    private Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -24,7 +26,8 @@ public class DiskScript : MonoBehaviour
         transform.rotation = Player.instance.transform.rotation;
         if (fired)
         {
-            transform.position += transform.rotation * new Vector3(.1f, 0, 0);
+            //transform.position += transform.rotation * new Vector3(.1f, 0, 0);
+            rb.AddForce(Player.instance.hmdTransform.transform.rotation * new Vector3(0, 0, 50));
             if (!audioSource.isPlaying)
             {
                 Destroy(gameObject);
@@ -55,5 +58,7 @@ public class DiskScript : MonoBehaviour
         audioSource.clip = fireClip;
         audioSource.loop = false;
         audioSource.Play();
+
+        rb.constraints = RigidbodyConstraints.None;
     }
 }

@@ -28,7 +28,7 @@ public class PunchSpawner : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("hit "+ other.gameObject.name);
+        //Debug.Log("hit "+ other.gameObject.name);
         if (IsPunching)
         {
             
