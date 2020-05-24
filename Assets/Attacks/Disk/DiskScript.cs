@@ -13,6 +13,9 @@ public class DiskScript : MonoBehaviour
     private int maxSize = 6;
     private AudioSource audioSource;
     private Rigidbody rb;
+
+    public float snapSpeed = 5;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,6 +31,8 @@ public class DiskScript : MonoBehaviour
         {
             //transform.position += transform.rotation * new Vector3(.1f, 0, 0);
             rb.AddForce(Player.instance.hmdTransform.transform.rotation * new Vector3(0, 0, 50));
+            //transform.LookAt(Player.instance.hmdTransform.transform);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, Player.instance.hmdTransform.transform.rotation, Time.time * snapSpeed);
             if (!audioSource.isPlaying)
             {
                 Destroy(gameObject);

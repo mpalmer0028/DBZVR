@@ -102,7 +102,7 @@ public class HandGestures : MonoBehaviour
         Quaternion direction = Quaternion.identity;
         var leftPull = triggerInput[SteamVR_Input_Sources.LeftHand].axis;
         var rightPull = triggerInput[SteamVR_Input_Sources.RightHand].axis;
-        Debug.Log(rightPull);
+        //Debug.Log(rightPull);
 
         #region One Hand Attack
         if (Vector3.Distance(leftPosition, rightPosition) >= minDistanceBetweenHands)
@@ -186,13 +186,13 @@ public class HandGestures : MonoBehaviour
         }
         
 
-        if ((leftPull > .3f || rightPull > .3f) && spawner != null) {
+        if ((leftPull > .3f && rightPull > .3f) && spawner != null) {
             if (powerball == null)
             {
                 this.StartPowerBall(direction);
             }
         }
-        else if((leftPull < .3f || rightPull < .3f) && powerball != null)
+        else if((leftPull < .3f && rightPull < .3f) && powerball != null)
         {            
             powerball.GetComponent<PowerBall>().Fire();
             powerball = null;
