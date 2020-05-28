@@ -56,6 +56,8 @@ public class HandGestures : MonoBehaviour
     public float z_spawnerPositionOffset;
     public GameObject BodyCollider;
 
+    public SkyboxScript skyboxScript;
+
     private GameObject spawner;
     private GameObject powerball;    
     private bool spawnerInScene;
@@ -73,6 +75,7 @@ public class HandGestures : MonoBehaviour
 
     private DiscZoneScript discZoneScriptL;
     private DiscZoneScript discZoneScriptR;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -112,8 +115,7 @@ public class HandGestures : MonoBehaviour
             {
                 if (diskInstance == null && discZoneScriptR.InTheZone)
                 {
-                    diskInstance = Instantiate(disk, rightPosition, Quaternion.identity,
-                        rightHand.transform);
+                    LoadDisk(rightPosition, rightHand.transform);
                 }
                 else if (diskInstance != null && !discZoneScriptR.InTheZone)
                 {
@@ -125,8 +127,7 @@ public class HandGestures : MonoBehaviour
             {
                 if (diskInstance == null && discZoneScriptL.InTheZone)
                 {
-                    diskInstance = Instantiate(disk, leftPosition, Quaternion.identity,
-                        leftHand.transform);
+                    LoadDisk(leftPosition, leftHand.transform);
                 }
                 else if (diskInstance != null && !discZoneScriptL.InTheZone)
                 {
@@ -264,6 +265,13 @@ public class HandGestures : MonoBehaviour
 
         #endregion
 
+    }
+
+    private void LoadDisk(Vector3 rightPosition, Transform handTransform)
+    {
+        diskInstance = Instantiate(disk, rightPosition, Quaternion.identity,
+                                handTransform);
+        diskInstance.GetComponent<SliceScript>().sbs = skyboxScript;
     }
 
     private void FireDisk()

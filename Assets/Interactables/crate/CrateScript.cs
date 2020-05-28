@@ -26,7 +26,7 @@ public class CrateScript : MonoBehaviour, IDestructible
 
         foreach(var cObjGrav in retval.transform.GetComponentsInChildren<ObjectGravity>())
         {
-            Debug.Log(planet.name);
+            //Debug.Log(planet.name);
             cObjGrav.planet = planet;
             cObjGrav.gravity = grav;
         }

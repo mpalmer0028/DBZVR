@@ -10,7 +10,7 @@ public class DiskScript : MonoBehaviour
     public AudioClip fireClip;
 
     private bool fired = false;
-    private int maxSize = 6;
+    private int maxSize = 8;
     private AudioSource audioSource;
     private Rigidbody rb;
 
@@ -32,7 +32,8 @@ public class DiskScript : MonoBehaviour
             //transform.position += transform.rotation * new Vector3(.1f, 0, 0);
             rb.AddForce(Player.instance.hmdTransform.transform.rotation * new Vector3(0, 0, 50));
             //transform.LookAt(Player.instance.hmdTransform.transform);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, Player.instance.hmdTransform.transform.rotation, Time.time * snapSpeed);
+            transform.rotation = Player.instance.hmdTransform.transform.rotation;
+            //transform.rotation = Quaternion.RotateTowards(transform.rotation, Player.instance.hmdTransform.transform.rotation, snapSpeed * Time.deltaTime);
             if (!audioSource.isPlaying)
             {
                 Destroy(gameObject);
