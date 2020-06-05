@@ -21,8 +21,9 @@ public class HandGestures : MonoBehaviour
     public GameObject rightHand;
     public GameObject testCube;
     public GameObject attackSpawner;
-    public GameObject blastLarge;
-    public GameObject disk;
+    public GameObject powerballPrefab;
+    public GameObject diskPrefab;
+    public GameObject spiritBombPrefab;
 
     /// <summary>
     /// How many samples to compare for punch
@@ -46,6 +47,7 @@ public class HandGestures : MonoBehaviour
 
     public float minDistanceBetweenHands;
 
+    public GameObject playerOverheadZone;
 
     public float x_spawnerRotationOffset = 45;
     public float y_spawnerRotationOffset;
@@ -60,6 +62,7 @@ public class HandGestures : MonoBehaviour
 
     private GameObject spawner;
     private GameObject powerball;    
+    private GameObject spiritBomb;    
     private bool spawnerInScene;
 
     private int punchSampleI = 0;
@@ -111,7 +114,7 @@ public class HandGestures : MonoBehaviour
         if (Vector3.Distance(leftPosition, rightPosition) >= minDistanceBetweenHands)
         {
 
-            if (rightPull > .3f)
+            if (rightPull > .3f && !discZoneScriptL.InTheZone)
             {
                 if (diskInstance == null && discZoneScriptR.InTheZone)
                 {
@@ -123,7 +126,7 @@ public class HandGestures : MonoBehaviour
                 }
 
             }
-            else if (leftPull > .3f)
+            else if (leftPull > .3f && !discZoneScriptR.InTheZone)
             {
                 if (diskInstance == null && discZoneScriptL.InTheZone)
                 {
@@ -148,8 +151,6 @@ public class HandGestures : MonoBehaviour
         #region Two Hand Attacks
         if (Vector3.Distance(leftPosition, rightPosition) < minDistanceBetweenHands)
         {
-            //Debug.Log(poseInput[SteamVR_Input_Sources.RightHand].localRotation);
-
             spawnerPosition = Vector3.Lerp(leftPosition, rightPosition, 0.5f);
 
             
@@ -175,7 +176,6 @@ public class HandGestures : MonoBehaviour
             {
                 spawner = Instantiate(attackSpawner, spawnerPosition, direction);
             }
-            //spawner.transform.RotateAround(spawner.transform.position, spawner.transform.up, Time.deltaTime);
         }
         else
         {
@@ -185,10 +185,11 @@ public class HandGestures : MonoBehaviour
                 spawner = null;
             }
         }
-        
 
-        if ((leftPull > .3f && rightPull > .3f) && spawner != null) {
-            if (powerball == null)
+        #region Power Ball
+        if ((leftPull > .3f && rightPull > .3f) && spawner != null && !(discZoneScriptL.InTheZone && discZoneScriptR.InTheZone)) {
+
+            if (powerball == null && spiritBomb == null)
             {
                 this.StartPowerBall(direction);
             }
@@ -200,9 +201,27 @@ public class HandGestures : MonoBehaviour
         }
         #endregion
 
+        #region Spirit bomb
+        if ((leftPull > .3f && rightPull > .3f) && discZoneScriptL.InTheZone && discZoneScriptR.InTheZone) {
+
+            if (powerball == null && spiritBomb == null)
+            {
+                this.StartSpiritBomb(direction);
+            }
+        }
+        else if((leftPull < .3f && rightPull < .3f) && spiritBomb != null)
+        {
+            spiritBomb.GetComponent<SpiritBombScript>().Fire();
+            spiritBomb = null;
+        }
+        #endregion
+
+
+        #endregion
+
         #region Punching
-        
-        if(punchSampleI < PuncheSampleLength)
+
+        if (punchSampleI < PuncheSampleLength)
         {
             punchSampleI++;            
         }
@@ -269,7 +288,7 @@ public class HandGestures : MonoBehaviour
 
     private void LoadDisk(Vector3 rightPosition, Transform handTransform)
     {
-        diskInstance = Instantiate(disk, rightPosition, Quaternion.identity,
+        diskInstance = Instantiate(diskPrefab, rightPosition, Quaternion.identity,
                                 handTransform);
         diskInstance.GetComponent<SliceScript>().sbs = skyboxScript;
     }
@@ -293,8 +312,17 @@ public class HandGestures : MonoBehaviour
         if (powerball == null)
         {
             var powerBallSpawnerTransform = this.spawner.transform.Find("PowerBallSpawner");
-            powerball = Instantiate(blastLarge, powerBallSpawnerTransform.position, direction, powerBallSpawnerTransform);
+            powerball = Instantiate(powerballPrefab, powerBallSpawnerTransform.position, direction, powerBallSpawnerTransform);
             //powerball.transform.localScale = powerball.transform.localScale * pull * 20;
+        }        
+    }
+    private void StartSpiritBomb(Quaternion direction)
+    {
+        if (spiritBomb == null)
+        {
+            var spiritBombSpawnerTransform = playerOverheadZone.transform;
+            spiritBomb = Instantiate(spiritBombPrefab, spiritBombSpawnerTransform.position, spiritBombSpawnerTransform.rotation, spiritBombSpawnerTransform);
+            Debug.Log("added");
         }        
     }
     private Quaternion CalcAvg(List<Quaternion> rotationlist)
