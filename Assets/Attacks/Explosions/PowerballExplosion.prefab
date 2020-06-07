@@ -143,6 +143,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   growthRate: 0.5
+  clips:
+  - {fileID: 8300000, guid: d592bad89775c594b8438bc0bbe0ee03, type: 3}
+  - {fileID: 8300000, guid: 82d53d43774cac84cb031046b2a00633, type: 3}
+  - {fileID: 8300000, guid: 37e865a5f8977b34cb6e57ba2af66c2a, type: 3}
+  - {fileID: 8300000, guid: 988867de0a3a65349bcad42e1158f096, type: 3}
 --- !u!1 &9017279662092253687
 GameObject:
   m_ObjectHideFlags: 0
@@ -4851,7 +4856,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10308, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: d99186ea77f778c42a714c20302e4b39, type: 2}
   - {fileID: 2100000, guid: f04f121e143a0894eaf0ceb940249f40, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0

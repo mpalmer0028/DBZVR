@@ -4764,6 +4764,7 @@ GameObject:
   - component: {fileID: 1044120674127283309}
   - component: {fileID: 1446956041946729682}
   - component: {fileID: 8246130332851618845}
+  - component: {fileID: 4487112319475753269}
   m_Layer: 9
   m_Name: SpiritBomb
   m_TagString: Untagged
@@ -4806,6 +4807,7 @@ MonoBehaviour:
   startAudio: {fileID: 8300000, guid: ae57fdf20a1c7334db63609a5d07b710, type: 3}
   endAudio: {fileID: 8300000, guid: fb5acfa1c2e417d47b9a93aeecebdd8e, type: 3}
   loopAudio: {fileID: 8300000, guid: 4e1243d1f64af7e42a67d4a29b388828, type: 3}
+  speed: 0.5
 --- !u!82 &8246130332851618845
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4903,6 +4905,49 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!54 &4487112319475753269
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2900066222518183496}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &4138355692666630428
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5759917630867792420}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7719728147076235122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5759917630867792420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 07cd80d9bcc0ad44186cc154417c1e54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  explosion: {fileID: 1192736373640987365, guid: 6c1471b7a515ff94c9442d3a430eb8f5,
+    type: 3}
 --- !u!1 &7978042433411239086
 GameObject:
   m_ObjectHideFlags: 0
@@ -6198,7 +6243,7 @@ ParticleSystem:
         m_RotationOrder: 4
     separateAxes: 0
   ColorModule:
-    enabled: 0
+    enabled: 1
     gradient:
       serializedVersion: 2
       minMaxState: 1
@@ -6206,9 +6251,9 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 1, g: 1, b: 1, a: 1}
-        key2: {r: 0, g: 0, b: 0, a: 0}
+        key0: {r: 1.4980392, g: 1.4980392, b: 1.4980392, a: 0.7254902}
+        key1: {r: 0, g: 1.7960784, b: 2, a: 1}
+        key2: {r: 0, g: 0, b: 0, a: 0.7921569}
         key3: {r: 0, g: 0, b: 0, a: 0}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
@@ -6223,8 +6268,8 @@ ParticleSystem:
         ctime6: 0
         ctime7: 0
         atime0: 0
-        atime1: 65535
-        atime2: 0
+        atime1: 31418
+        atime2: 65535
         atime3: 0
         atime4: 0
         atime5: 0
@@ -6232,7 +6277,7 @@ ParticleSystem:
         atime7: 0
         m_Mode: 0
         m_NumColorKeys: 2
-        m_NumAlphaKeys: 2
+        m_NumAlphaKeys: 3
       minGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -9875,6 +9920,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e3e5a13487ba7584d98221f6b9aa628f, type: 3}
+--- !u!1 &5759917630867792420 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: e3e5a13487ba7584d98221f6b9aa628f,
+    type: 3}
+  m_PrefabInstance: {fileID: 4381645676198312749}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8769651182969065527 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: e3e5a13487ba7584d98221f6b9aa628f,

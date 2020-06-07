@@ -16,9 +16,10 @@ public class SpiritBombScript : MonoBehaviour
     public AudioClip startAudio;
     public AudioClip endAudio;
     public AudioClip loopAudio;
+    public float speed = .5f;
 
     private AudioSource audioSource;
-
+    private Rigidbody rb;
     private Transform ballTransform;
     private ParticleSystem.ShapeModule fingerShape;
     private Transform playerTransform;
@@ -30,11 +31,13 @@ public class SpiritBombScript : MonoBehaviour
     private Ray ray;
     private float enter;
     private ParticleSystem.Particle[] particles;
+    
 
     // Start is called before the first frame update
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
+        rb = GetComponent<Rigidbody>();
         playerTransform = Player.instance.transform;
         headsetTransform = Player.instance.hmdTransform.transform;
         fingerTransform = fingers_ps.transform;
@@ -74,7 +77,13 @@ public class SpiritBombScript : MonoBehaviour
         
         if (transform.parent == null)
         {
-            //ballTransform.position += new Vector3(0, 0, -.1f);
+            rb.AddForce(Player.instance.hmdTransform.forward * speed * ballTransform.localScale.x);
+            
+            if (audioSource.time > audioSource.clip.length / 2)
+            {
+                //ballTransform.rotation = Player.instance.hmdTransform.rotation;
+            }
+            
         }
         else
         {
@@ -101,6 +110,8 @@ public class SpiritBombScript : MonoBehaviour
         transform.parent = null;
         var em = charge_ps.emission;
         em.rateOverTime = 0;
-        Destroy(gameObject, endAudio.length);
+        charge_ps.SetParticles(new ParticleSystem.Particle[] { });
+        
+        Destroy(gameObject, endAudio.length + 5);
     }
 }
