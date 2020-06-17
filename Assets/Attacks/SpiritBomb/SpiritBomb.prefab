@@ -4807,7 +4807,7 @@ MonoBehaviour:
   startAudio: {fileID: 8300000, guid: ae57fdf20a1c7334db63609a5d07b710, type: 3}
   endAudio: {fileID: 8300000, guid: fb5acfa1c2e417d47b9a93aeecebdd8e, type: 3}
   loopAudio: {fileID: 8300000, guid: 4e1243d1f64af7e42a67d4a29b388828, type: 3}
-  speed: 0.5
+  speed: 0.1
 --- !u!82 &8246130332851618845
 AudioSource:
   m_ObjectHideFlags: 0

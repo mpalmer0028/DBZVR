@@ -322,7 +322,7 @@ public class HandGestures : MonoBehaviour
         {
             var spiritBombSpawnerTransform = playerOverheadZone.transform;
             spiritBomb = Instantiate(spiritBombPrefab, spiritBombSpawnerTransform.position, spiritBombSpawnerTransform.rotation, spiritBombSpawnerTransform);
-            Debug.Log("added");
+            //Debug.Log("added");            
         }        
     }
     private Quaternion CalcAvg(List<Quaternion> rotationlist)

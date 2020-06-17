@@ -9292,6 +9292,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 447487055, guid: a7f872b95d1ec124c8abbea8a762b9ac, type: 3}
+      propertyPath: powerUpTriggerVolume
+      value: 1.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6699378737807594082, guid: a7f872b95d1ec124c8abbea8a762b9ac,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -9307,6 +9311,11 @@ PrefabInstance:
       propertyPath: attractorPlanet
       value: 
       objectReference: {fileID: 405959848}
+    - target: {fileID: 6699378738086264446, guid: a7f872b95d1ec124c8abbea8a762b9ac,
+        type: 3}
+      propertyPath: showDebugText
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6699378738091568156, guid: a7f872b95d1ec124c8abbea8a762b9ac,
         type: 3}
       propertyPath: m_Name

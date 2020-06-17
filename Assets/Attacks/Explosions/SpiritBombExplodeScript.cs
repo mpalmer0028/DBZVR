@@ -26,7 +26,7 @@ public class SpiritBombExplodeScript : MonoBehaviour
             {
                 des.Destruct();
             }
-            Destroy(this.gameObject);
+            Destroy(this.gameObject, 2);
         }
     }
 
@@ -34,6 +34,7 @@ public class SpiritBombExplodeScript : MonoBehaviour
     {
         var exp = Instantiate(explosion, transform.position, UnityEngine.Random.rotation);
         exp.transform.parent = null;
+        exp.transform.localScale = transform.localScale/10;
     }
 
 }
