@@ -57,19 +57,11 @@ namespace Valve.VR
             }
         }
         
-        public virtual SteamVR_Action_Skeleton SkeletonLeftHand
+        public virtual SteamVR_Action_Skeleton SkeletonLeft
         {
             get
             {
-                return SteamVR_Actions.default_SkeletonLeftHand;
-            }
-        }
-        
-        public virtual SteamVR_Action_Skeleton SkeletonRightHand
-        {
-            get
-            {
-                return SteamVR_Actions.default_SkeletonRightHand;
+                return SteamVR_Actions.default_SkeletonLeft;
             }
         }
         
@@ -150,6 +142,22 @@ namespace Valve.VR
             get
             {
                 return SteamVR_Actions.default_ToggleSnapToPlanet;
+            }
+        }
+        
+        public virtual SteamVR_Action_Single Shoot
+        {
+            get
+            {
+                return SteamVR_Actions.default_Shoot;
+            }
+        }
+        
+        public virtual SteamVR_Action_Skeleton SkeletonRight
+        {
+            get
+            {
+                return SteamVR_Actions.default_SkeletonRight;
             }
         }
         

@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Hand
   layers:
   - Default
   - TransparentFX
@@ -14,10 +15,10 @@ TagManager:
   - 
   - 
   - Player
-  - 
-  - 
-  - 
-  - 
+  - Player Attacks
+  - PostProcess
+  - Player Zones
+  - Player Hands
   - 
   - 
   - 

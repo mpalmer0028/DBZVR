@@ -21,14 +21,9 @@
       "type": "pose"
     },
     {
-      "name": "/actions/default/in/SkeletonLeftHand",
+      "name": "/actions/default/in/SkeletonLeft",
       "type": "skeleton",
       "skeleton": "/skeleton/hand/left"
-    },
-    {
-      "name": "/actions/default/in/SkeletonRightHand",
-      "type": "skeleton",
-      "skeleton": "/skeleton/hand/right"
     },
     {
       "name": "/actions/default/in/Squeeze",
@@ -74,6 +69,15 @@
       "type": "boolean"
     },
     {
+      "name": "/actions/default/in/Shoot",
+      "type": "vector1"
+    },
+    {
+      "name": "/actions/default/in/SkeletonRight",
+      "type": "skeleton",
+      "skeleton": "/skeleton/hand/right"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     },
@@ -110,7 +114,7 @@
   "action_sets": [
     {
       "name": "/actions/default",
-      "usage": "single"
+      "usage": "leftright"
     },
     {
       "name": "/actions/platformer",
@@ -122,6 +126,10 @@
     },
     {
       "name": "/actions/mixedreality",
+      "usage": "single"
+    },
+    {
+      "name": "/actions/NewSet",
       "usage": "single"
     }
   ],
@@ -183,8 +191,6 @@
       "/actions/default/in/HeadsetOnHead": "Headset on head (proximity sensor)",
       "/actions/default/in/InteractUI": "Interact With UI",
       "/actions/default/in/Pose": "Pose",
-      "/actions/default/in/SkeletonLeftHand": "Skeleton (Left)",
-      "/actions/default/in/SkeletonRightHand": "Skeleton (Right)",
       "/actions/default/in/Teleport": "Teleport",
       "/actions/default/out/Haptic": "Haptic",
       "/actions/platformer/in/Jump": "Jump",
@@ -193,7 +199,8 @@
       "/actions/default/in/Run": "TouchPad",
       "/actions/default/in/FlyUp": "FlyUp",
       "/actions/default/in/FlyDown": "FlyDown",
-      "/actions/default/in/ToggleSnapToPlanet": "Toggle snap to planet"
+      "/actions/default/in/ToggleSnapToPlanet": "Toggle snap to planet",
+      "/actions/default/in/Shoot": "Shooting Trigger"
     }
   ]
 }

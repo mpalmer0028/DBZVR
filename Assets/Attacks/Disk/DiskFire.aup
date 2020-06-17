@@ -1,0 +1,66 @@
+<?xml version="1.0" standalone="no" ?>
+<!DOCTYPE project PUBLIC "-//audacityproject-1.3.0//DTD//EN" "http://audacity.sourceforge.net/xml/audacityproject-1.3.0.dtd" >
+<project xmlns="http://audacity.sourceforge.net/xml/" projname="DiskFire_data" version="1.3.0" audacityversion="2.3.0" sel0="1.5917233560" sel1="1.5917233560" vpos="128" h="0.0000000000" zoom="354.3349847561" rate="44100.0" snapto="off" selectionformat="hh:mm:ss + milliseconds" frequencyformat="Hz" bandwidthformat="octaves">
+	<tags>
+		<tag name="Software" value="Lavf57.56.101"/>
+		<tag name="major_brand" value="dash"/>
+		<tag name="minor_version" value="0"/>
+		<tag name="compatible_brands" value="iso6mp41"/>
+	</tags>
+	<wavetrack name="Destructo Disk Fire (DBZ Sound Effect)" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="70195">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808612.au" len="70195" min="-0.000001" max="0.0" rms="0.0"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="1.59172336" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="21034">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808609.au" len="21034" min="-0.789923" max="0.765988" rms="0.14903"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Destructo Disk Fire (DBZ Sound Effect)" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="1" rate="44100" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="70195">
+				<waveblock start="0">
+					<simpleblockfile filename="e08085a7.au" len="70195" min="-0.0" max="0.0" rms="0.0"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+		<waveclip offset="1.59172336" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="21034">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808dd4.au" len="21034" min="-0.778362" max="0.756707" rms="0.149034"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Destructo Disk Moving (DBZ Sound Effect)" channel="0" linked="1" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="80362">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808075.au" len="80362" min="-0.878486" max="0.880418" rms="0.243066"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+	<wavetrack name="Destructo Disk Moving (DBZ Sound Effect)" channel="1" linked="0" mute="0" solo="0" height="150" minimized="0" isSelected="0" rate="44100" gain="1.0" pan="0.0" colorindex="0">
+		<waveclip offset="0.00000000" colorindex="0">
+			<sequence maxsamples="262144" sampleformat="262159" numsamples="80362">
+				<waveblock start="0">
+					<simpleblockfile filename="e0808404.au" len="80362" min="-0.880955" max="0.880342" rms="0.243423"/>
+				</waveblock>
+			</sequence>
+			<envelope numpoints="0"/>
+		</waveclip>
+	</wavetrack>
+</project>
