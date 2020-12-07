@@ -8,8 +8,9 @@ using Valve.VR.InteractionSystem;
 public class PowerBall : MonoBehaviour
 {
     public int life;
+	public float WiggleAmount=.5f;
     public float speed = .5f;
-    public float maxBallScale = 3f;
+	public float maxBallScale = 5f;
 
     public int beamDelay = 60;
     public ParticleSystem beamSystem;
@@ -17,6 +18,7 @@ public class PowerBall : MonoBehaviour
 
     public GameObject blastEmitter;
     public GameObject explosion;
+	public GameObject Rods;
 
     public bool fired;
     public YellCatcher yellCatcher;
@@ -34,7 +36,8 @@ public class PowerBall : MonoBehaviour
 
     private float initRateOverDistance;
     private Vector3 initFirePos;
-
+	private bool WiggleShrinking;
+	private float WiggleTracker;
     
 
     // Start is called before the first frame update
@@ -127,7 +130,26 @@ public class PowerBall : MonoBehaviour
                 em.constant = emissionRate;
             }
 
-        }        
+	        // Bounce between grow/shrink
+	        var wiggleStep = .1f;
+	        if(WiggleShrinking){
+		        if(WiggleTracker <= 0){
+			        WiggleShrinking = false;
+		        }else{
+			        transform.localScale -= new Vector3(wiggleStep, wiggleStep, wiggleStep);
+			        WiggleTracker -= wiggleStep;
+		        }
+	        }else{
+		        if(WiggleTracker >= WiggleAmount){
+			        WiggleShrinking = true;
+		        }else{
+			        transform.localScale += new Vector3(wiggleStep, wiggleStep, wiggleStep);
+			        WiggleTracker += wiggleStep;
+		        }
+	        }
+
+        }   
+	    
         
     }
 
@@ -175,6 +197,7 @@ public class PowerBall : MonoBehaviour
 
     public void Fire()
     {
-        this.fired = true;        
+	    this.fired = true;
+	    Destroy(Rods);
     }
 }
