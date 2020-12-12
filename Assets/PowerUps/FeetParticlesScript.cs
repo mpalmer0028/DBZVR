@@ -17,6 +17,7 @@ public class FeetParticlesScript : MonoBehaviour
     public float powerUpTriggerVolume;
     public GameObject SuperHandGlowL;
     public GameObject SuperHandGlowR;
+    public GameObject PowerVolume;
 
     private Transform playerTranform;
     private ParticleSystem ps;
@@ -81,8 +82,12 @@ public class FeetParticlesScript : MonoBehaviour
                 var rem = rock.emission;
                 rem.rateOverTime = rf;
             }
-            SuperHandGlowL.SetActive(true);
-            SuperHandGlowR.SetActive(true);
+
+            // enable super effects
+            //SuperHandGlowL.SetActive(true);
+            //SuperHandGlowR.SetActive(true);
+            PowerVolume.SetActive(true);
+
             rocksStopped = true;
         }
     }

@@ -20,5 +20,7 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs: []
-    m_Floats: []
+    m_Floats:
+    - FresnelPower: 0.75
+    - _FresnelPower: 0.75
     m_Colors: []

@@ -38,7 +38,8 @@ public class PowerBall : MonoBehaviour
     private Vector3 initFirePos;
 	private bool WiggleShrinking;
 	private float WiggleTracker;
-    
+	private float FresnelPower;
+	
 
     // Start is called before the first frame update
     void Start()
@@ -53,8 +54,8 @@ public class PowerBall : MonoBehaviour
         //}
         spawner = transform.parent.gameObject;
         rb = GetComponent<Rigidbody>();
-        ps = GetComponent<ParticleSystem>();
-
+	    ps = GetComponent<ParticleSystem>();
+	    
         emissionRate = ps.emission.rateOverTime.constant;
 
         audioSource = GetComponent<AudioSource>();
@@ -64,7 +65,8 @@ public class PowerBall : MonoBehaviour
         var beamEmission = beamSystem.emission;
         initRateOverDistance = beamEmission.rateOverDistance.constant;
         var beamRateOverDistance = beamEmission.rateOverDistance;
-        beamRateOverDistance.constant = 0;
+	    beamRateOverDistance.constant = 0;
+	    
     }
 
     // Update is called once per frame
@@ -111,7 +113,8 @@ public class PowerBall : MonoBehaviour
             {
                 audioSource.clip = loopAudio;
                 audioSource.Play();
-                audioSource.loop = true;
+	            audioSource.loop = true;
+	            
             }
         }
         var em = ps.emission.rateOverTime;
@@ -120,7 +123,8 @@ public class PowerBall : MonoBehaviour
         {
             var micLoudness = yellCatcher.micLoudness * yellCatcher.factor/5;
             var growthRate = .1f * (micLoudness > 1 ? micLoudness : 1);
-            transform.localScale += new Vector3(growthRate, growthRate, growthRate);
+	        transform.localScale += new Vector3(growthRate, growthRate, growthRate);
+	        
             if(micLoudness > 1)
             {
                 em.constant = micLoudness + emissionRate;

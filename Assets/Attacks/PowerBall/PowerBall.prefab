@@ -4818,6 +4818,7 @@ GameObject:
   - component: {fileID: 6728622736499770179}
   - component: {fileID: 8439336655257063927}
   - component: {fileID: 235100196496661262}
+  - component: {fileID: 7431582858277229379}
   m_Layer: 9
   m_Name: PowerBall_LOD0
   m_TagString: Untagged
@@ -4886,6 +4887,21 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &7431582858277229379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3085743939814524152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86e0b4bcba7be4e4ebf4b9eae52ce0f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InitialFresnelPower: 0.5
+  EndFresnelPower: 2
+  TimeToLerp: 5
 --- !u!1 &3222330939554007276
 GameObject:
   m_ObjectHideFlags: 0
@@ -4897,6 +4913,7 @@ GameObject:
   - component: {fileID: 5455785425622549724}
   - component: {fileID: 1203872176377895371}
   - component: {fileID: 14303883037812278}
+  - component: {fileID: 4415658191911401951}
   m_Layer: 9
   m_Name: PowerBall_LOD1
   m_TagString: Untagged
@@ -4965,6 +4982,21 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &4415658191911401951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3222330939554007276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86e0b4bcba7be4e4ebf4b9eae52ce0f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InitialFresnelPower: 0.5
+  EndFresnelPower: 2
+  TimeToLerp: 5
 --- !u!1 &6862199056754509219
 GameObject:
   m_ObjectHideFlags: 0
@@ -9730,6 +9762,7 @@ GameObject:
   - component: {fileID: 4437306608659922200}
   - component: {fileID: 8657576943923347244}
   - component: {fileID: 7425609987274225512}
+  - component: {fileID: 3942161472209485952}
   m_Layer: 9
   m_Name: PowerBall_LOD2
   m_TagString: Untagged
@@ -9798,6 +9831,21 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &3942161472209485952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8002910726368738289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86e0b4bcba7be4e4ebf4b9eae52ce0f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InitialFresnelPower: 0.5
+  EndFresnelPower: 2
+  TimeToLerp: 5
 --- !u!1 &8042495952128699602
 GameObject:
   m_ObjectHideFlags: 0
@@ -14786,6 +14834,7 @@ GameObject:
   - component: {fileID: 3225370275809392544}
   - component: {fileID: 3784006871696352993}
   - component: {fileID: 3422810473051292351}
+  - component: {fileID: 8614424785108461660}
   m_Layer: 9
   m_Name: PowerBall_LOD3
   m_TagString: Untagged
@@ -14854,6 +14903,21 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &8614424785108461660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9061039375940756089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 86e0b4bcba7be4e4ebf4b9eae52ce0f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InitialFresnelPower: 0.5
+  EndFresnelPower: 2
+  TimeToLerp: 5
 --- !u!1001 &3763040374708173199
 PrefabInstance:
   m_ObjectHideFlags: 0
