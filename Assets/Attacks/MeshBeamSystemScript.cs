@@ -5,12 +5,13 @@ using UnityEngine;
 public class MeshBeamSystemScript : MonoBehaviour
 {
 	public Transform Powerball;
+	public Transform StartingTrasform;
 	
 	
 	/// <summary>
 	/// Number of verts for each ring
 	/// </summary>
-	private int RingResolution = 8;
+	private int RingResolution = 16;
 	private float RingDistance = 1;
 	
 	private Mesh Mesh;
@@ -19,6 +20,8 @@ public class MeshBeamSystemScript : MonoBehaviour
     void Start()
     {
 	    //GetComponent<>
+	    this.Mesh = new Mesh();
+	    
     }
 
     // Update is called once per frame

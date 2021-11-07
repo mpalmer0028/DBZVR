@@ -8629,6 +8629,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Powerball: {fileID: 0}
+  StartingTrasform: {fileID: 0}
 --- !u!23 &1642513540
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -9466,6 +9467,17 @@ PrefabInstance:
       propertyPath: powerUpTriggerVolume
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 1302900213173008472, guid: a7f872b95d1ec124c8abbea8a762b9ac,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 6889853851409834231, guid: 42009130cb31c90428920175f880bf29,
+        type: 3}
+    - target: {fileID: 1302900213173008472, guid: a7f872b95d1ec124c8abbea8a762b9ac,
+        type: 3}
+      propertyPath: m_Convex
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6699378737807594082, guid: a7f872b95d1ec124c8abbea8a762b9ac,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -9555,6 +9567,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_RenderPostProcessing
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8341274049400117506, guid: a7f872b95d1ec124c8abbea8a762b9ac,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7f872b95d1ec124c8abbea8a762b9ac, type: 3}

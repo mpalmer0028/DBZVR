@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 using Valve.VR.InteractionSystem;
+using UnityEngine.UI;
 public struct HandTransform
 {
     public Vector3 leftPosition;
@@ -24,6 +25,7 @@ public class HandGestures : MonoBehaviour
     public GameObject powerballPrefab;
     public GameObject diskPrefab;
     public GameObject spiritBombPrefab;
+    public Text textDebugObject;
 
     /// <summary>
     /// How many samples to compare for punch
@@ -48,6 +50,7 @@ public class HandGestures : MonoBehaviour
     public float minDistanceBetweenHands;
 
     public GameObject playerOverheadZone;
+	public GameObject playerChargeHandZone;
 
     public float x_spawnerRotationOffset = 45;
     public float y_spawnerRotationOffset;
@@ -76,8 +79,8 @@ public class HandGestures : MonoBehaviour
 
     private GameObject diskInstance;
 
-    private DiscZoneScript discZoneScriptL;
-    private DiscZoneScript discZoneScriptR;
+    private HandZoneScript handZoneScriptL;
+    private HandZoneScript handZoneScriptR;
     
 
     // Start is called before the first frame update
@@ -86,18 +89,20 @@ public class HandGestures : MonoBehaviour
         punchSpawnerL = leftHand.GetComponent<PunchSpawner>();
         punchSpawnerR = rightHand.GetComponent<PunchSpawner>();
 
-        discZoneScriptL = leftHand.GetComponent<DiscZoneScript>();
-        discZoneScriptR = rightHand.GetComponent<DiscZoneScript>();
+        handZoneScriptL = leftHand.GetComponent<HandZoneScript>();
+        handZoneScriptR = rightHand.GetComponent<HandZoneScript>();
         //if(ps == null || vr_movement == null)
         //{
         //    //must have script refs
         //    throw new System.Exception();
-        //}
+	    //}
+	    Debug.Log("Outer "+handZoneScriptL.InOuterZone.ToString());
     }
 
     // Update is called once per frame
     void Update()
-    {
+	{
+		textDebugObject.text = "Outer "+handZoneScriptL.InOuterZone.ToString();
         //var playerPos = Player.instance.hmdTransform.transform.position;
         var playerPos = transform.position;
         var leftPosition = leftHand.transform.position;
@@ -114,25 +119,25 @@ public class HandGestures : MonoBehaviour
         if (Vector3.Distance(leftPosition, rightPosition) >= minDistanceBetweenHands)
         {
 
-            if (rightPull > .3f && !discZoneScriptL.InTheZone)
+            if (rightPull > .3f && !handZoneScriptL.InOverheadZone)
             {
-                if (diskInstance == null && discZoneScriptR.InTheZone)
+                if (diskInstance == null && handZoneScriptR.InOverheadZone)
                 {
                     LoadDisk(rightPosition, rightHand.transform);
                 }
-                else if (diskInstance != null && !discZoneScriptR.InTheZone)
+                else if (diskInstance != null && !handZoneScriptR.InOverheadZone)
                 {
                     FireDisk();
                 }
 
             }
-            else if (leftPull > .3f && !discZoneScriptR.InTheZone)
+            else if (leftPull > .3f && !handZoneScriptR.InOverheadZone)
             {
-                if (diskInstance == null && discZoneScriptL.InTheZone)
+                if (diskInstance == null && handZoneScriptL.InOverheadZone)
                 {
                     LoadDisk(leftPosition, leftHand.transform);
                 }
-                else if (diskInstance != null && !discZoneScriptL.InTheZone)
+                else if (diskInstance != null && !handZoneScriptL.InOverheadZone)
                 {
                     FireDisk();
                 }
@@ -187,7 +192,7 @@ public class HandGestures : MonoBehaviour
         }
 
         #region Power Ball
-        if ((leftPull > .3f && rightPull > .3f) && spawner != null && !(discZoneScriptL.InTheZone && discZoneScriptR.InTheZone)) {
+        if ((leftPull > .3f && rightPull > .3f) && spawner != null && !(handZoneScriptL.InOverheadZone && handZoneScriptR.InOverheadZone)) {
 
             if (powerball == null && spiritBomb == null)
             {
@@ -202,7 +207,7 @@ public class HandGestures : MonoBehaviour
         #endregion
 
         #region Spirit bomb
-        if ((leftPull > .3f && rightPull > .3f) && discZoneScriptL.InTheZone && discZoneScriptR.InTheZone) {
+        if ((leftPull > .3f && rightPull > .3f) && handZoneScriptL.InOverheadZone && handZoneScriptR.InOverheadZone) {
 
             if (powerball == null && spiritBomb == null)
             {
