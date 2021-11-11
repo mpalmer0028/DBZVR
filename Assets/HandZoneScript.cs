@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class HandZoneScript : MonoBehaviour
 {
-    public GameObject OverheadZone;
-    public GameObject OuterZone;
-
-    public bool InOverheadZone = false;
+	public GameObject CloserZone;
+	public GameObject OuterZone;
+	public GameObject OverheadZone;
+    
+	public bool InCloserZone = false;
 	public bool InOuterZone = false;
-	void Start(){
-	}
-
+    public bool InOverheadZone = false;
+	
+	public float ExitCloserZoneTime;
+	public float ExitOuterZoneTime;
+	
     void OnCollisionEnter(Collision collision)
     {
         if (collision.collider.name == OverheadZone.name)
@@ -21,6 +24,10 @@ public class HandZoneScript : MonoBehaviour
         else if (collision.collider.name == OuterZone.name)
         {
             InOuterZone = true;
+        }
+        else if (collision.collider.name == CloserZone.name)
+        {
+            InCloserZone = true;
         }
 
     }
@@ -33,7 +40,13 @@ public class HandZoneScript : MonoBehaviour
         }
         else if (collision.collider.name == OuterZone.name)
         {
-            InOuterZone = false;
+	        InOuterZone = false;
+	        ExitOuterZoneTime = Time.time;
+        }
+        else if (collision.collider.name == CloserZone.name)
+        {
+	        InCloserZone = false;
+	        ExitCloserZoneTime = Time.time;
         }
 
     }

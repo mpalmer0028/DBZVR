@@ -4,52 +4,71 @@ using UnityEngine;
 
 public class PunchSpawner : MonoBehaviour
 {
-    public bool IsPunching = false;
+	public float TimeFromCloserToOuter =.03f;
+	public bool IsPunching{
+		get{
+			if(audioSource){
+				return audioSource.isPlaying;
+			}
+			return false;
+		}
+		set{
+			if(!audioSource.isPlaying && value){
+				audioSource.PlayOneShot(SwingClip);
+				Swung = true;
+			}
+		}
+	}
     public AudioClip SwingClip;
     private AudioSource audioSource;
+	private HandZoneScript handZoneScript;
+	private bool Swung;
 
     // Start is called before the first frame update
     void Start()
-    {
+	{
+		//TimeFromCloserToOuter = audioSource.clip.length;
         audioSource = GetComponent<AudioSource>();
+        handZoneScript = GetComponent<HandZoneScript>();
     }
 
     // Update is called once per frame
     void Update()
     {        
-        if (IsPunching)
+	    if (!IsPunching && handZoneScript.InOuterZone && 
+		    handZoneScript.ExitCloserZoneTime + TimeFromCloserToOuter >= Time.time &&
+	    	!Swung)
         {
-            if (!audioSource.isPlaying)
-            {
-                IsPunching = false;
-            }
+		    IsPunching = true;
+        } else if(handZoneScript.InCloserZone){
+        	Swung = false;
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        //Debug.Log("hit "+ other.gameObject.name);
-        if (IsPunching)
-        {
+    //private void OnTriggerEnter(Collider other)
+    //{
+    //    //Debug.Log("hit "+ other.gameObject.name);
+    //    if (IsPunching)
+    //    {
             
-        }
-        var des = other.gameObject.GetComponent<IDestructible>();
-        if (des == null)
-        {
-            des = other.gameObject.transform.parent.gameObject.GetComponent<IDestructible>();
-        }
-        if (des != null)
-        {
-            des.Destruct();
-        }
-    }
+    //    }
+    //    var des = other.gameObject.GetComponent<IDestructible>();
+    //    if (des == null)
+    //    {
+    //        des = other.gameObject.transform.parent.gameObject.GetComponent<IDestructible>();
+    //    }
+    //    if (des != null)
+    //    {
+    //        des.Destruct();
+    //    }
+    //}
 
-    public GameObject Punch()
-    {
-        IsPunching = true;
-        audioSource.PlayOneShot(SwingClip);
-        return this.gameObject;
-    }
+    //public GameObject Punch()
+    //{
+    //    IsPunching = true;
+    //    audioSource.PlayOneShot(SwingClip);
+    //    return this.gameObject;
+    //}
 
       
 }
