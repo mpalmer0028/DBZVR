@@ -243,25 +243,5 @@ public class HandGestures : MonoBehaviour
             //Debug.Log("added");            
         }        
     }
-    private Quaternion CalcAvg(List<Quaternion> rotationlist)
-    {
-        if (rotationlist.Count == 0)
-            throw new ArgumentException();
-
-        var final = rotationlist[0];
-        var skipFirst = true;
-        foreach (var q in rotationlist)
-        {
-            if (skipFirst)
-            {
-                skipFirst = false;
-            }
-            else
-            {
-                final = Quaternion.Lerp(final, q, .5f).normalized;
-            }
-        }
-        
-        return final;
-    }
+    
 }

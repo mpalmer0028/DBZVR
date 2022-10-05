@@ -30,7 +30,7 @@ public class DiskScript : MonoBehaviour
         if (fired)
         {
             //transform.position += transform.rotation * new Vector3(.1f, 0, 0);
-            rb.AddForce(Player.instance.hmdTransform.transform.rotation * new Vector3(0, 0, 50));
+	        rb.AddForce((Player.instance.hmdTransform.transform.rotation * new Vector3(0, 0, 50))+(Player.instance.hmdTransform.transform.up*.05f));
             //transform.LookAt(Player.instance.hmdTransform.transform);
             transform.rotation = Player.instance.hmdTransform.transform.rotation;
             //transform.rotation = Quaternion.RotateTowards(transform.rotation, Player.instance.hmdTransform.transform.rotation, snapSpeed * Time.deltaTime);

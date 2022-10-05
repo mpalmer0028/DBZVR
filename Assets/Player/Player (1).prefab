@@ -1484,7 +1484,7 @@ ParticleSystem:
     flipU: 0
     flipV: 0
   VelocityModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -6297,7 +6297,7 @@ ParticleSystem:
     flipU: 0
     flipV: 0
   VelocityModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -11051,7 +11051,7 @@ ParticleSystem:
     flipU: 0
     flipV: 0
   VelocityModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -14447,7 +14447,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   yellCatcher: {fileID: 6699378737888557716}
-  factor: 1000
+  micSensitivity: 500
   rockFactor: 500
   rock0: {fileID: 889249002}
   rock1: {fileID: 313637290}
@@ -15911,7 +15911,7 @@ ParticleSystem:
     flipU: 0
     flipV: 0
   VelocityModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -20762,7 +20762,7 @@ ParticleSystem:
     flipU: 0
     flipV: 0
   VelocityModule:
-    enabled: 0
+    enabled: 1
     x:
       serializedVersion: 2
       minMaxState: 0
@@ -30033,6 +30033,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b556e00b3ac5bc240aa4bda1f7420283, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Squeeze:
+    actionPath: /actions/default/in/Squeeze
+    needsReinit: 0
   micLoudness: 0
   factor: 100
   powerSlider: {fileID: 6699378738811759126}

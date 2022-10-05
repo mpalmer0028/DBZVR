@@ -19,7 +19,7 @@ public class PowerRodScript : MonoBehaviour
 		var t = Time.time - StartTime;
 		transform.localRotation *= Quaternion.Euler(0, 0, 1+(t/4));
 	    for(var i = 0; i < Rods.Length; i++){
-	    	if((!Rods[i].active) && RodStartFrames[i] <= t){
+	    	if((!Rods[i].activeSelf) && RodStartFrames[i] <= t){
 	    		//Debug.Log(Time.time -StartTime);
 	    		Rods[i].SetActive(true);
 	    	}

@@ -29,6 +29,7 @@ public class PunchSpawner : MonoBehaviour
 	{
 		//TimeFromCloserToOuter = audioSource.clip.length;
         audioSource = GetComponent<AudioSource>();
+		audioSource.Stop();
         handZoneScript = GetComponent<HandZoneScript>();
     }
 

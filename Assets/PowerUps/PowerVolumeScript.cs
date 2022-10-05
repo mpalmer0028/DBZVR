@@ -30,7 +30,7 @@ public class PowerVolumeScript : MonoBehaviour
 		while(randomIndexes.Count < 20){
 			int r = Random.Range(0, Spikes.Length-1);
 			if(!randomIndexes.Contains(r)){
-				Spikes[r].SetActive(!(Spikes[r].active));
+				Spikes[r].SetActive(!(Spikes[r].activeSelf));
 				randomIndexes.Add(r);
 			}
 			
