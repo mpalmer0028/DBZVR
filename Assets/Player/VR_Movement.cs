@@ -22,8 +22,6 @@ public class VR_Movement : MonoBehaviour
 
     private AudioSource audioSource;
     private CharacterController characterController;
-    private bool flySoundPlaying = false;
-    private bool walkSoundPlaying = false;
     private RaycastHit hit;
 
     // Start is called before the first frame update
@@ -89,6 +87,7 @@ public class VR_Movement : MonoBehaviour
             {
                 StopFlyingSound();
             }
+	        //StopFlyingSound();
         }
         
        
@@ -97,36 +96,30 @@ public class VR_Movement : MonoBehaviour
 
     void StartFlyingSoundIfNotPlaying()
     {
-        if (!flySoundPlaying)
+	    if (!audioSource.isPlaying)
         {
-            walkSoundPlaying = false;
             audioSource.clip = flySound;
             audioSource.Play();
-            flySoundPlaying = true;
         }
     }
 
     void StopFlyingSound()
     {
         audioSource.Pause();
-        flySoundPlaying = false;
     }
 
     void StartWalkingSoundIfNotPlaying()
     {
-        if (!walkSoundPlaying)
+        if (!audioSource.isPlaying)
         {
-            flySoundPlaying = false;
             audioSource.clip = walkSound;
             audioSource.Play();
-            walkSoundPlaying = true;
         }
     }
 
     void StopWalkingSound()
     {
         audioSource.Pause();
-        walkSoundPlaying = false;
     }
     CollisionFlags MoveCharacter(Vector3 motion)
     {

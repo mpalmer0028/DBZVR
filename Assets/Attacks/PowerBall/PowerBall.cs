@@ -8,8 +8,9 @@ using Valve.VR.InteractionSystem;
 public class PowerBall : MonoBehaviour
 {
     public int life;
+	public float WiggleAmount=.5f;
     public float speed = .5f;
-    public float maxBallScale = 3f;
+	public float maxBallScale = 5f;
 
     public int beamDelay = 60;
     public ParticleSystem beamSystem;
@@ -17,6 +18,7 @@ public class PowerBall : MonoBehaviour
 
     public GameObject blastEmitter;
     public GameObject explosion;
+	public GameObject Rods;
 
     public bool fired;
     public YellCatcher yellCatcher;
@@ -34,8 +36,10 @@ public class PowerBall : MonoBehaviour
 
     private float initRateOverDistance;
     private Vector3 initFirePos;
-
-    
+	private bool WiggleShrinking;
+	private float WiggleTracker;
+	private float FresnelPower;
+	
 
     // Start is called before the first frame update
     void Start()
@@ -50,8 +54,8 @@ public class PowerBall : MonoBehaviour
         //}
         spawner = transform.parent.gameObject;
         rb = GetComponent<Rigidbody>();
-        ps = GetComponent<ParticleSystem>();
-
+	    ps = GetComponent<ParticleSystem>();
+	    
         emissionRate = ps.emission.rateOverTime.constant;
 
         audioSource = GetComponent<AudioSource>();
@@ -61,7 +65,8 @@ public class PowerBall : MonoBehaviour
         var beamEmission = beamSystem.emission;
         initRateOverDistance = beamEmission.rateOverDistance.constant;
         var beamRateOverDistance = beamEmission.rateOverDistance;
-        beamRateOverDistance.constant = 0;
+	    beamRateOverDistance.constant = 0;
+	    
     }
 
     // Update is called once per frame
@@ -108,7 +113,8 @@ public class PowerBall : MonoBehaviour
             {
                 audioSource.clip = loopAudio;
                 audioSource.Play();
-                audioSource.loop = true;
+	            audioSource.loop = true;
+	            
             }
         }
         var em = ps.emission.rateOverTime;
@@ -117,7 +123,8 @@ public class PowerBall : MonoBehaviour
         {
             var micLoudness = yellCatcher.micLoudness * yellCatcher.factor/5;
             var growthRate = .1f * (micLoudness > 1 ? micLoudness : 1);
-            transform.localScale += new Vector3(growthRate, growthRate, growthRate);
+	        transform.localScale += new Vector3(growthRate, growthRate, growthRate);
+	        
             if(micLoudness > 1)
             {
                 em.constant = micLoudness + emissionRate;
@@ -127,7 +134,26 @@ public class PowerBall : MonoBehaviour
                 em.constant = emissionRate;
             }
 
-        }        
+	        // Bounce between grow/shrink
+	        var wiggleStep = .1f;
+	        if(WiggleShrinking){
+		        if(WiggleTracker <= 0){
+			        WiggleShrinking = false;
+		        }else{
+			        transform.localScale -= new Vector3(wiggleStep, wiggleStep, wiggleStep);
+			        WiggleTracker -= wiggleStep;
+		        }
+	        }else{
+		        if(WiggleTracker >= WiggleAmount){
+			        WiggleShrinking = true;
+		        }else{
+			        transform.localScale += new Vector3(wiggleStep, wiggleStep, wiggleStep);
+			        WiggleTracker += wiggleStep;
+		        }
+	        }
+
+        }   
+	    
         
     }
 
@@ -175,6 +201,7 @@ public class PowerBall : MonoBehaviour
 
     public void Fire()
     {
-        this.fired = true;        
+	    this.fired = true;
+	    Destroy(Rods);
     }
 }

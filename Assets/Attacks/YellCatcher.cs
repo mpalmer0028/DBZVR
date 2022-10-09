@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Valve.VR;
+using Valve.VR.InteractionSystem;
 
 public class YellCatcher : MonoBehaviour
 {
+
+	public SteamVR_Action_Single Squeeze;
 
     public float micLoudness;
     public int factor = 900;

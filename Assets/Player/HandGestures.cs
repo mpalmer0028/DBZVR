@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Valve.VR;
 using Valve.VR.InteractionSystem;
+using UnityEngine.UI;
 public struct HandTransform
 {
     public Vector3 leftPosition;
@@ -24,26 +25,7 @@ public class HandGestures : MonoBehaviour
     public GameObject powerballPrefab;
     public GameObject diskPrefab;
     public GameObject spiritBombPrefab;
-
-    /// <summary>
-    /// How many samples to compare for punch
-    /// </summary>
-    public int PuncheResolution = 20;
-
-    /// <summary>
-    /// How many updates to skip before sampling a position again
-    /// </summary>
-    public int PuncheSampleLength = 30;
-
-    /// <summary>
-    /// How fast a punch has to go to be registered
-    /// </summary>
-    public float PuncheThreshold = .5f;
-
-    /// <summary>
-    /// How close to the current looking direction the punch must be
-    /// </summary>
-    public float AcceptablePunchAngle = 45;
+    public Text textDebugObject;
 
     public float minDistanceBetweenHands;
 
@@ -63,11 +45,6 @@ public class HandGestures : MonoBehaviour
     private GameObject spawner;
     private GameObject powerball;    
     private GameObject spiritBomb;    
-    private bool spawnerInScene;
-
-    private int punchSampleI = 0;
-    private float punchMagnitudeL = 0;
-    private float punchMagnitudeR = 0;
 
     private LinkedList<HandTransform> recentPositions = new LinkedList<HandTransform>();
 
@@ -76,8 +53,8 @@ public class HandGestures : MonoBehaviour
 
     private GameObject diskInstance;
 
-    private DiscZoneScript discZoneScriptL;
-    private DiscZoneScript discZoneScriptR;
+    private HandZoneScript handZoneScriptL;
+    private HandZoneScript handZoneScriptR;
     
 
     // Start is called before the first frame update
@@ -86,18 +63,20 @@ public class HandGestures : MonoBehaviour
         punchSpawnerL = leftHand.GetComponent<PunchSpawner>();
         punchSpawnerR = rightHand.GetComponent<PunchSpawner>();
 
-        discZoneScriptL = leftHand.GetComponent<DiscZoneScript>();
-        discZoneScriptR = rightHand.GetComponent<DiscZoneScript>();
+        handZoneScriptL = leftHand.GetComponent<HandZoneScript>();
+        handZoneScriptR = rightHand.GetComponent<HandZoneScript>();
         //if(ps == null || vr_movement == null)
         //{
         //    //must have script refs
         //    throw new System.Exception();
-        //}
+	    //}
+	    //Debug.Log("Outer L:R "+handZoneScriptL.InOuterZone.ToString()+":"+handZoneScriptR.InOuterZone.ToString());
     }
 
     // Update is called once per frame
     void Update()
-    {
+	{
+		textDebugObject.text = "Outer L:R "+handZoneScriptL.InOuterZone.ToString()+":"+handZoneScriptR.InOuterZone.ToString();
         //var playerPos = Player.instance.hmdTransform.transform.position;
         var playerPos = transform.position;
         var leftPosition = leftHand.transform.position;
@@ -114,25 +93,25 @@ public class HandGestures : MonoBehaviour
         if (Vector3.Distance(leftPosition, rightPosition) >= minDistanceBetweenHands)
         {
 
-            if (rightPull > .3f && !discZoneScriptL.InTheZone)
+            if (rightPull > .3f && !handZoneScriptL.InOverheadZone)
             {
-                if (diskInstance == null && discZoneScriptR.InTheZone)
+                if (diskInstance == null && handZoneScriptR.InOverheadZone)
                 {
                     LoadDisk(rightPosition, rightHand.transform);
                 }
-                else if (diskInstance != null && !discZoneScriptR.InTheZone)
+                else if (diskInstance != null && !handZoneScriptR.InOverheadZone)
                 {
                     FireDisk();
                 }
 
             }
-            else if (leftPull > .3f && !discZoneScriptR.InTheZone)
+            else if (leftPull > .3f && !handZoneScriptR.InOverheadZone)
             {
-                if (diskInstance == null && discZoneScriptL.InTheZone)
+                if (diskInstance == null && handZoneScriptL.InOverheadZone)
                 {
                     LoadDisk(leftPosition, leftHand.transform);
                 }
-                else if (diskInstance != null && !discZoneScriptL.InTheZone)
+                else if (diskInstance != null && !handZoneScriptL.InOverheadZone)
                 {
                     FireDisk();
                 }
@@ -187,14 +166,16 @@ public class HandGestures : MonoBehaviour
         }
 
         #region Power Ball
-        if ((leftPull > .3f && rightPull > .3f) && spawner != null && !(discZoneScriptL.InTheZone && discZoneScriptR.InTheZone)) {
+		if ((leftPull > .3f && rightPull > .3f) && spawner != null && 
+			!(handZoneScriptL.InOverheadZone && handZoneScriptR.InOverheadZone) &&
+			!(handZoneScriptL.InOuterZone && handZoneScriptR.InOuterZone)) {
 
             if (powerball == null && spiritBomb == null)
             {
                 this.StartPowerBall(direction);
             }
         }
-        else if((leftPull < .3f && rightPull < .3f) && powerball != null)
+		else if(((leftPull < .3f && rightPull < .3f) || (handZoneScriptL.InOuterZone && handZoneScriptR.InOuterZone)) && powerball != null)
         {            
             powerball.GetComponent<PowerBall>().Fire();
             powerball = null;
@@ -202,7 +183,7 @@ public class HandGestures : MonoBehaviour
         #endregion
 
         #region Spirit bomb
-        if ((leftPull > .3f && rightPull > .3f) && discZoneScriptL.InTheZone && discZoneScriptR.InTheZone) {
+        if ((leftPull > .3f && rightPull > .3f) && handZoneScriptL.InOverheadZone && handZoneScriptR.InOverheadZone) {
 
             if (powerball == null && spiritBomb == null)
             {
@@ -219,70 +200,7 @@ public class HandGestures : MonoBehaviour
 
         #endregion
 
-        #region Punching
-
-        if (punchSampleI < PuncheSampleLength)
-        {
-            punchSampleI++;            
-        }
-        else
-        {
-            recentPositions.AddFirst(new HandTransform {
-                leftPosition = leftPosition - playerPos, rightPosition = rightPosition - playerPos,
-                leftRotation = leftRotation, rightRotation = rightRotation
-            });
-            if (recentPositions.Count > this.PuncheResolution)
-            {
-                recentPositions.RemoveLast();
-            }
-            
-            var posNode = recentPositions.First;
-            punchMagnitudeL = 0;
-            punchMagnitudeR = 0;
-            var punchDirectionL = new List<Quaternion>();
-            var punchDirectionR = new List<Quaternion>();
-            var handMovingAwayFromPlayerL = false;
-            var handMovingAwayFromPlayerR = false;
-            while (posNode != null)
-            {
-                if(posNode.Previous != null)
-                {
-                    punchMagnitudeL += Vector3.Distance(posNode.Previous.Value.leftPosition, posNode.Value.leftPosition);
-                    punchMagnitudeR += Vector3.Distance(posNode.Previous.Value.rightPosition, posNode.Value.rightPosition);
-                    //punchDirectionL.Add(Quaternion.FromToRotation(posNode.Previous.Value.leftPosition, posNode.Value.leftPosition));
-                    //punchDirectionR.Add(Quaternion.FromToRotation(posNode.Previous.Value.rightPosition, posNode.Value.rightPosition));
-                    handMovingAwayFromPlayerL = Vector3.Distance(posNode.Previous.Value.leftPosition, playerPos) < Vector3.Distance(posNode.Value.leftPosition, playerPos);
-                    handMovingAwayFromPlayerR = Vector3.Distance(posNode.Previous.Value.rightPosition, playerPos) < Vector3.Distance(posNode.Value.rightPosition, playerPos);
-                }                
-                posNode = posNode.Next;
-            }
-            
-            //var punchAvgL = CalcAvg(punchDirectionL);
-            //var punchAvgR = CalcAvg(punchDirectionR);
-            //var angleL = Quaternion.Angle(Player.instance.hmdTransform.transform.rotation, punchAvgL);
-            //var angleR = Quaternion.Angle(Player.instance.hmdTransform.transform.rotation, punchAvgR);
-            if ((punchMagnitudeL > PuncheThreshold && handMovingAwayFromPlayerL) || 
-                (punchMagnitudeR > PuncheThreshold && handMovingAwayFromPlayerR))
-            {
-                //Instantiate(testCube, recentPositions.Last.Value.leftPosition, recentPositions.Last.Value.leftRotation);
-                recentPositions.Clear();
-                //Debug.Log("Punch L:" + punchMagnitudeL + " R:" + punchMagnitudeR);
-                if(punchMagnitudeL > PuncheThreshold && handMovingAwayFromPlayerL)
-                {
-                    punchSpawnerL.Punch();
-                }
-
-                if (punchMagnitudeR > PuncheThreshold && handMovingAwayFromPlayerR)
-                {
-                    punchSpawnerR.Punch();
-                }
-                //Debug.Log("PunchRo L:" + angleL + " R:" + angleR);
-            }
-
-            punchSampleI = 0;
-        }
-
-        #endregion
+        
 
     }
 
@@ -325,25 +243,5 @@ public class HandGestures : MonoBehaviour
             //Debug.Log("added");            
         }        
     }
-    private Quaternion CalcAvg(List<Quaternion> rotationlist)
-    {
-        if (rotationlist.Count == 0)
-            throw new ArgumentException();
-
-        var final = rotationlist[0];
-        var skipFirst = true;
-        foreach (var q in rotationlist)
-        {
-            if (skipFirst)
-            {
-                skipFirst = false;
-            }
-            else
-            {
-                final = Quaternion.Lerp(final, q, .5f).normalized;
-            }
-        }
-        
-        return final;
-    }
+    
 }
